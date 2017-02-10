@@ -1,0 +1,65 @@
+@name Saveitems
+@inputs SivI:array SinI:array
+@outputs SivO:array SinO:array
+@persist Is:array Inames:array Item Mode:string Overwrite Itemspawn
+@trigger 
+runOnChat(1)
+if(first()) {
+    Item = 1
+    Overwrite = 1
+    Mode = "write"
+}
+elseif(chatClk()) {
+    if(owner():lastSaid()=="it's time to reset the array") {
+        Is:propDelete()
+        for(I=1,Is:count()) {
+            Is:remove(1)
+            Inames:remove(1)
+        }
+    }
+    if(owner():lastSaid():left(5)=="/mode") {
+        if(owner():lastSaid():explode(" ")[2,string]=="write") {
+            Mode = "write"
+        }
+        elseif(owner():lastSaid():explode(" ")[2,string]=="read") {
+            Mode = "read"
+        }
+        else {
+            hint("you sure did it now",5)
+        }
+    }
+    if(owner():lastSaid():left(5)=="/write") {
+            if(Overwrite) {
+                for(Siv0:count()) {
+                    SivO:remove(1)
+                    SinO:remove(1)
+                }
+            }
+            for(I=1,Is:count()) {
+                SivO[I,vector]=Is[I,entity]:pos()
+                SinO[I,string]=Inames[I,string]
+            }
+        }
+    if(Mode=="write") {
+        if(lastSaid():left(2)=="/p") {
+            Is[Item,entity]=propSpawn(lastSaid():explode(" ")[2,string],lastSpoke():aimPos(),1)
+            Inames[Item,string]=lastSaid():explode(" ")[2,string]
+            Item++
+        }
+        for(I=1,Inames:count()) {
+            print(Inames[I,string])
+        }
+    }
+    
+    
+    if(Mode=="read") {
+        if(owner():lastSaid()=="/spawn") {
+            timer("createTimer")
+            Itemspawn = 1
+        }
+    }
+}
+elseif(clk("cretetimer") {
+    propSpawn(SinI[Itemspawn,string],SivI[Itemspawn,vector],1)
+    Itemspawn++
+}

@@ -1,0 +1,72 @@
+@name Mapper single screen
+@inputs Map:wirelink
+@outputs 
+@persist Res Target:entity MaxX MinX MaxY MinY Xr Yr Zr Zdis Res2 MaxZ MinZ Test Targets:array Targetc:array
+@trigger 
+if(first()) {
+    Res = 512
+    Target = owner()
+    MaxX = 15000
+    MinX = -15000
+    MaxY = 15000
+    MinY = -15000
+    MaxZ = -6000
+    MinZ = -10800
+    Xr = vec(0,MinX,0):distance(vec(0,MaxX,0))/Res
+    Yr = vec(0,MinY,0):distance(vec(0,MaxY,0))/Res
+    Zdis = vec(0,MinZ,0):distance(vec(0,MaxZ,0))
+    Zr = 255/Zdis
+    Res2 = Res/2
+    for(I = 1, Targets:count()) {
+        Targets:remove(1)
+    }
+    for(I = 1, Targetc:count()) {
+        Targetc:remove(1)
+    }
+    
+    Targets[1,entity]=findPlayerByName("L4Z")
+    Targets[2,entity]=findPlayerByName("maam skunk")
+    Targets[3,entity]=findPlayerByName("Audr")
+    Targets[4,entity]=findPlayerByName("rocket")
+    Targets[5,entity]=findPlayerByName("gm")
+    Targets[6,entity]=findPlayerByName("Narfyrion")
+    Targets[6,entity]=findPlayerByName("Suspense")
+    
+    Targetc[1,vector]=vec(255,0,0)
+    Targetc[2,vector]=vec(0,255,0)
+    Targetc[3,vector]=vec(0,0,255)
+    Targetc[4,vector]=vec(255,0,255)
+    Targetc[5,vector]=vec(255,255,0)
+    Targetc[6,vector]=vec(0,255,255)
+    Targetc[7,vector]=vec(255,255,255)
+    
+    function wirelink:initScreen(Res) {
+        Map[1048574]=0 #Reset Screen and whatever was on it will be cleared.
+        Map[1048569]=3 #Set color mode to 3
+        Map[1048575]=1 #Apply changes
+        Map[1048572]=Res #Set new resolution on Y (Height)
+        Map[1048573]=Res #Set new resolution on X (Width)
+    }
+    
+    function wirelink:mapPlayer(T:entity, Color:vector, Res) {
+        Map[round(T:pos():y()/Yr+Res2)+(round(T:pos():x()/Xr+Res2)*Res)]=rgb2digi(Color, 3)
+    }
+    Map:initScreen(Res)
+}
+
+interval(round(75/Targets:count()))
+
+
+for(I = 1, Targets:count()) {
+    Map:mapPlayer(Targets[I,entity], Targetc[I,vector], Res)
+}
+
+
+
+
+#[for(I = 1, Targets:count()) {
+    Map:mapPlayer(Targets[I,entity], vec((owner():pos():z()-MinZ)*Zr,0,255-(owner():pos():z()-MinZ)*Zr), Res)
+}]#
+
+
+

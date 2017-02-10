@@ -1,0 +1,98 @@
+@name TD2
+@inputs 
+@outputs 
+@persist Targets:array Weapons:array Enemy:string Active Enemies:array Enemiestemp:array Tnum Run Debug
+@trigger 
+
+if(first()) {
+    Debug = 1
+    Run = 1
+    Tnum = 1
+    runOnChat(1)
+    Active = 0
+    Weapons = "ar2,crowbar,pistol,shotgun":explode(",")
+    Enemy = "npc_citizen"
+    Targets = players()
+    timer("nexttarg",60000)
+}
+if(chatClk()) {
+    if(owner():lastSaid() == "/on") {
+        Active = 1
+        timer("active",2500)
+    }
+    elseif(owner():lastSaid() == "/off") {
+        Active = 0
+    }
+    elseif(owner():lastSaid() == "/refreshtargets") {
+        Targets = players()
+        if(Debug) {
+            print(Targets)
+            print(Targets:count())
+        }
+    }
+    elseif(owner():lastSaid() == "/npcrun") {
+        Run = 1
+    }
+    elseif(owner():lastSaid() == "/npcwalk") {
+        Run = 0
+    }
+    elseif(owner():lastSaid() == "/debugon") {
+        Debug = 1
+    }
+    elseif(owner():lastSaid() == "/debugoff") {
+        Debug = 0
+    }
+}
+if(clkName() == "active") {
+    if(Active) {
+        timer("active",2500)
+        findIncludeClass(Enemy)
+        findExcludeEntities(Enemies)
+        findInSphere(vec(0,0,0),20000)
+        Enemiestemp = findToArray()
+        if(Debug) {
+            print(toString(Enemiestemp:count()) + " new enemies found")
+        }
+        foreach(K,Tg:entity=Enemiestemp) {                          #Find new minions, give them weapons and set their relationship
+            Tg:npcGiveWeapon(Weapons[randint(1,Weapons:count()),string])
+            foreach(Kz,Tgz:entity=Targets) {
+                Tg:npcRelationship(Tgz,"hate",999)
+            }
+        }
+        Enemies = Enemies:merge(Enemiestemp)
+        Enemiestemp:clear()
+        if(Run) {
+            foreach(K,Tg:entity=Enemies) {
+                if(!Tg:isValid()) {
+                    Enemies:remove(K)
+                }
+                Tg:npcGoRun(Targets[Tnum,entity]:pos())
+            }
+        }
+        else {
+            foreach(K,Tg:entity=Enemies) {
+                if(!Tg:isValid()) {
+                    Enemies:remove(K)
+                }
+                Tg:npcGoWalk(Targets[Tnum,entity]:pos())
+            }
+        }
+        if(Debug) {
+            print(toString(Enemies:count()) + " total enemies affected")
+        }
+    }
+}
+elseif(clkName() == "nexttarg") {
+    if(Tnum >= Targets:count()) {
+        Tnum = 1
+    }
+    else {
+        Tnum++
+    }
+    timer("nexttarg",60000)
+    if(Debug) {
+        print("Target changed to target #"+ toString(Tnum) + ": " + Targets[Tnum,entity]:name())
+    }
+}
+
+

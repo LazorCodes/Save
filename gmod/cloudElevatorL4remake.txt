@@ -1,0 +1,38 @@
+@name elevator l4z remake
+@inputs
+@outputs
+@persist Ent:entity Targ:vector Debug
+@trigger all
+
+if(first()) {
+    Debug = 1
+    Ent = entity():isWeldedTo()
+    Targ = Ent:pos()
+    Mul = 100000
+    runOnChat(1)
+}
+
+if(chatClk(owner())) {
+    if(owner():lastSaid():left(5) == "/targ") {
+        Targ = Targ:setZ(owner():lastSaid():explode(" ")[2,string]:toNumber())
+    }
+    if(owner():lastSaid():left(5) == "/land") {
+        Targ = Targ:setZ(rangerOffset(10000,Ent:pos()+Ent:boxMin(),vec(-90,-90,-90)):position():z())
+    }
+    if(owner():lastSaid():left(5) == "/goto") {
+        local TargetPlayer = findPlayerByName(owner():lastSaid():explode(" ")[2,string])
+        if(!TargetPlayer:isValid()) {
+            print("Target does not exist")
+        }
+        else {
+            Targ = TargetPlayer:pos() + vec(0,0,100)
+        }
+    }
+}
+
+
+applyForce((Targ-Ent:pos()-Ent:vel())*Mul)
+
+interval(10)
+
+

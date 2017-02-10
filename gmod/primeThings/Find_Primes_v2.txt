@@ -1,0 +1,67 @@
+@name Find Primes v2
+@inputs 
+@outputs 
+@persist Primes:gtable Number Divide MaxNumber Last Data:gtable
+@trigger 
+interval(10)
+if(first()) {
+    function addGt(Numberg:number) {
+        Primes[Primes:count()+1,number]=Numberg
+    }
+    Primes=gTable("Primes",1)
+    Data=gTable("Data",1)
+    Primes:clear()
+    Primes[1,number]=2
+    Primes[2,number]=3
+    Primes[3,number]=5
+    Data["repeats",number] = 8500
+    Data["throttle",number] = 5000000*1000
+    Number = Primes[Primes:count(),number]
+    Primes:removeNumber(toString(Primes:count()))
+    Divide = Primes[3,number]
+    MaxNumber = sqrt(Number)
+    Last = toString(Number):right(1):toNumber()
+    timer("Done",30000)
+}
+if(clkName()=="Done") {
+    print(Primes:count())
+    error("Done")
+}
+Data["ops",number]=ops()
+
+if(Data["ops",number]>Data["throttle",number]) {
+    Data["repeats",number] = Data["repeats",number]-1
+}
+else {
+    Data["repeats",number] = Data["repeats",number]+1
+}
+
+for(I=1,Data["repeats",number]) {
+    if(Last==0|Last==2|Last==4|Last==5|Last==6|Last==8) {
+        Number++
+        MaxNumber = sqrt(Number)
+        Last = toString(Number):right(1):toNumber()
+    }
+    else {
+        if(Primes[Divide,number]<MaxNumber) {
+            if(Number%Primes[Divide,number]==0) {
+                Number++
+                Divide=3
+                MaxNumber = sqrt(Number)
+                Last = toString(Number):right(1):toNumber()
+            }
+            else {
+                Divide++
+            }
+        }
+        else {
+            addGt(Number)
+            Divide=3
+            Number++
+            MaxNumber = sqrt(Number)
+            Last = toString(Number):right(1):toNumber()
+        }
+    }
+}
+
+

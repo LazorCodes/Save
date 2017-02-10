@@ -1,0 +1,52 @@
+@name Prettiest uncicorn
+@outputs
+@persist Lowcolor:vector Highcolor:vector X
+@inputs Trail1:wirelink Trail2:wirelink Trail3:wirelink Trail4:wirelink 
+@trigger all
+interval(1)
+if(first()|X>100) {
+    Lowcolor=vec(0,100,100)
+    Highcolor=vec(0,0,255)
+    
+    Trail1["FadeTime",number] = 5
+    Trail2["FadeTime",number] = 5
+    Trail3["FadeTime",number] = 5
+    Trail4["FadeTime",number] = 5
+    
+    Trail1["Size",number] = 3500
+    Trail2["Size",number] = 3500
+    Trail3["Size",number] = 3500
+    Trail4["Size",number] = 3500
+    
+    Trail1["Active",number] = 1
+    Trail2["Active",number] = 1
+    Trail3["Active",number] = 1
+    Trail4["Active",number] = 1
+    
+    Trail1["LineBeam",number] = 1
+    Trail2["LineBeam",number] = 1
+    Trail3["LineBeam",number] = 1
+    Trail4["LineBeam",number] = 1
+    
+    Trail1["GroundBeam",number] = 0
+    Trail2["GroundBeam",number] = 0
+    Trail3["GroundBeam",number] = 0
+    Trail4["GroundBeam",number] = 0
+    
+    Trail1["Local",number] = 1
+    Trail2["Local",number] = 1
+    Trail3["Local",number] = 1
+    Trail4["Local",number] = 1
+    X = 0
+}
+
+Trail1["Pos",vector] = randvec(vec(-1000,-1000,6000),vec(1000,1000,3000))
+Trail2["Pos",vector] = randvec(vec(-1000,-1000,6000),vec(1000,1000,3000))
+Trail3["Pos",vector] = randvec(vec(-1000,-1000,6000),vec(1000,1000,3000))
+Trail4["Pos",vector] = randvec(vec(-1000,-1000,6000),vec(1000,1000,3000))
+
+Trail1["Color",vector] = randvec((Lowcolor),(Highcolor))
+Trail2["Color",vector] = randvec((Lowcolor),(Highcolor))
+Trail3["Color",vector] = randvec((Lowcolor),(Highcolor))
+Trail4["Color",vector] = randvec((Lowcolor),(Highcolor))
+X++

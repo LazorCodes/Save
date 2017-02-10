@@ -1,0 +1,54 @@
+@name Find Primes
+@inputs 
+@outputs 
+@persist Number Last D MaxNumber Speed Max Maxops Oplimit Runtime Primes:gtable
+@trigger 
+if (ops()>Oplimit) {
+    Maxops = ops()
+    Max++
+}
+if(ops()<500) {
+    Max--
+}
+interval(25*Max)
+
+if(clkName()=="Done") {
+    concmd("say "+toString(Primes["Primes",array]:count())+ " primes , highest prime:" +toString(Primes["Primes",array][Primes["Primes",array]:count(),number])+ " highest ops/s:" + toString(Maxops) + " planned runtime:"+toString(Runtime)+ "ms oplimit:" + toString(Oplimit))
+    print(Primes["Primes",array])
+    error("Done")
+}
+if(first()) {
+    Primes = gTable("Primes",1)
+    Runtime = 3000
+    Oplimit = 20000
+    Max=20
+    Number = 6
+    Primes["Primes",array]:pushNumber(2)
+    Primes["Primes",array]:pushNumber(3)
+    Primes["Primes",array]:pushNumber(5)
+    timer("Done",Runtime)
+}
+for(I=1,5) {
+    Last = toString(Number):right(1):toNumber()
+    D = 3
+    MaxNumber=Number/2
+    
+    if(Last!=1&Last!=3&Last!=7&Last!=9) {
+        Number++
+    }
+    else {
+        while(D<MaxNumber) {
+            if(Number%D==0) {
+                Number++
+                break
+            }
+            else {
+                D=D+2
+                if(D>=MaxNumber) {
+                    Primes["Primes",array]:pushNumber(Number)
+                    Number++
+                }
+            }
+        }
+    }
+}

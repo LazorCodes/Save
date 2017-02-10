@@ -1,0 +1,11 @@
+@name Test
+@inputs M
+@outputs 
+@persist 
+@trigger M
+
+#include "include/attacks"
+
+if(inputClkName() == "M") {
+    fireMissile(owner():pos(),owner():pos()+vec(0,2000,5000),"models/props_phx/mk-82.mdl")
+}

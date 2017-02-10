@@ -1,0 +1,53 @@
+return {
+	basicslime = {
+		droptable = "slime",
+		type = "basicslime",
+		texture = "slime.png",
+		class = "enemy",
+		health = 10,
+		damage = 5,
+		ai = "slime",
+		w = 25,
+		h = 18,
+		phystype = "cross",
+		friction = 3,
+		color = { 255, 255, 255 },
+		movrate = 3,
+		attrate = 1,
+		gravity = true
+	},
+	zombie = {
+		droptable = nil,
+		type = "zombie",
+		texture = "zombone.png",
+		class = "enemy",
+		health = 25,
+		damage = 10,
+		ai = "zombie",
+		w = 25,
+		h = 50,
+		phystype = "cross",
+		friction = 3,
+		color = { 255, 255, 255 },
+		movrate = 0,
+		attrate = 1,
+		gravity = true
+	},
+	basicslime2 = {
+		droptable = nil,
+		type = "basicslime2",
+		texture = "slime2.png",
+		class = "enemy",
+		health = 10,
+		damage = 5,
+		ai = "slime",
+		w = 25,
+		h = 18,
+		phystype = "cross",
+		friction = 3,
+		color = { 255, 255, 255 },
+		movrate = 3,
+		attrate = 1,
+		gravity = true
+	}
+}

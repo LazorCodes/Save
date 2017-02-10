@@ -1,0 +1,51 @@
+@name Oceanmapper 3000
+@inputs Map:wirelink Ranger:vector
+@outputs 
+@persist Res Target:entity MaxX MinX MaxY MinY Xr Yr Zr Zdis Res2 MaxZ MinZ Test Targets:array Targetc:array
+@trigger 
+if(first()) {
+    Res = 512
+    Target = owner()
+    MaxX = 15344
+    MinX = -15344
+    MaxY = 15344
+    MinY = -15344
+    MaxZ = -8042
+    MinZ = -9791
+    Xr = vec(0,MinX,0):distance(vec(0,MaxX,0))/Res
+    Yr = vec(0,MinY,0):distance(vec(0,MaxY,0))/Res
+    Zdis = vec(0,MinZ,0):distance(vec(0,MaxZ,0))
+    Zr = 255/Zdis
+    Res2 = Res/2
+    for(I = 1, Targets:count()) {
+        Targets:remove(1)
+    }
+    for(I = 1, Targetc:count()) {
+        Targetc:remove(1)
+    }
+    
+    Targets[1,entity]=findPlayerByName("L4Z0R_")
+    Targets[2,entity]=findPlayerByName("[H] puttal")
+    Targets[3,entity]=findPlayerByName("NO")
+    
+    Targetc[1,vector]=vec(255,0,0)
+    Targetc[2,vector]=vec(0,255,0)
+    Targetc[3,vector]=vec(0,0,255)
+    
+    function wirelink:initScreen(Res) {
+        Map[1048574]=0 #Reset Screen and whatever was on it will be cleared.
+        Map[1048569]=3 #Set color mode to 3
+        Map[1048575]=1 #Apply changes
+        Map[1048572]=Res #Set new resolution on Y (Height)
+        Map[1048573]=Res #Set new resolution on X (Width)
+    }
+    
+    function wirelink:mapPlayer(Color:vector, Res) {
+        Map[round(Ranger:y()/Yr+Res2)+(round(Ranger:x()/Xr+Res2)*Res)]=rgb2digi(Color, 3)
+    }
+    Map:initScreen(Res)
+}
+
+interval(25)
+
+Map:mapPlayer(vec((Ranger:z()-MinZ)*Zr,0,255-(Ranger:z()-MinZ)*Zr), Res)

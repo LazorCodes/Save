@@ -1,0 +1,36 @@
+@name Console
+@inputs S:wirelink
+@outputs 
+@persist Target:entity SafeD DangerD
+@trigger 
+interval(100)
+
+
+if(first()) {
+    SafeD = 3000
+    DangerD = 500
+    Target = findPlayerByName("wemm")
+    S[2041] = 1
+    TName = Target:name()
+}
+#S[2041] = 0
+
+THealth = Target:health()
+TArmor = Target:armor()
+TWeapon = toString(Target:weapon()):explode("[")[3,string]:left(toString(Target:weapon()):explode("[")[3,string]:length()-1)
+TPos = Target:pos()
+TDistance = TPos:distance(entity():pos())
+
+
+
+S:writeString("Targeting: " + TName,0,0,vec(255,255,255),vec(0,0,0),0)
+#S:writeString("",1,2,vec(255,255,255),vec(0,0,0),0)
+S:writeString("Health: " + toString(THealth),0,2,vec(255,255,255),vec(0,0,0),0)
+S:writeString("Armor: " + toString(TArmor),0,3,vec(255,255,255),vec(0,0,0),0)
+S:writeString("Distance: " + toString(round(TDistance)),0,4,vec(255,255,255),vec(0,0,0),0)
+S:writeString("Weapon: " + TWeapon,0,5,vec(255,255,255),vec(0,0,0),0)
+#S:writeString("",1,7,vec(255,255,255),vec(0,0,0),0)
+#S:writeString("",1,8,vec(255,255,255),vec(0,0,0),0)
+#S:writeString("",1,9,vec(255,255,255),vec(0,0,0),0)
+
+

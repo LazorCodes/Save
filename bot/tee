@@ -1,0 +1,10 @@
+Uncaught exception:
+[string "bundle:deps/require.lua"]:300: /Users/l4/Desktop/bot/cfile.lua:1: '=' expected near '<eof>'
+stack traceback:
+	[C]: in function 'assert'
+	[string "bundle:deps/require.lua"]:300: in function 'require'
+	[string "bundle:main.lua"]:118: in function 'main'
+	[string "bundle:init.lua"]:49: in function <[string "bundle:init.lua"]:47>
+	[C]: in function 'xpcall'
+	[string "bundle:init.lua"]:47: in function 'fn'
+	[string "bundle:deps/require.lua"]:309: in function <[string "bundle:deps/require.lua"]:265>

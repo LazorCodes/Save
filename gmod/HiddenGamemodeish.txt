@@ -1,0 +1,132 @@
+@name Abilities
+@inputs 
+@outputs 
+@persist Cooldown4 Cooldown Interval Sounds:array TempE:entity Cooldown2 Cooldown3 Savepos:vector Cooldown5
+@trigger 
+
+
+if(first()) {
+    Cooldown = 0
+    Cooldown2 = 0
+    Cooldown3 = 0
+    Interval = 100
+    Sounds[1,string]="weapons/melee/knife_hit1.wav"
+    Sounds[2,string]="weapons/melee/knife_hit2.wav"
+    Sounds[3,string]="weapons/melee/knife_hit3.wav"
+    Sounds[4,string]="weapons/melee/knife_hitworld1.wav"
+    Sounds[5,string]="weapons/melee/knife_stab.wav"
+    Sounds[6,string]="weapons/melee/melee_hitworld1.wav"
+    Sounds[7,string]="weapons/melee/melee_slash1.wav"
+    Sounds[8,string]="weapons/melee/melee_slash2.wav"
+    Sounds[9,string]="weapons/melee/melee_slash3.wav"
+}
+
+interval(Interval)
+
+if(owner():keyPressed("v")) {
+    if(Cooldown<=0) {
+        propSpawn("models/Gibs/wood_gib01e.mdl",owner():pos(),1):soundPlay(toString(random(1000000)),10,"Building_Teleporter.Send")
+        concmd("setpos " + toString(owner():aimPos():x()) + " " + toString(owner():aimPos():y()) + " " + toString(owner():aimPos():z()))
+        Cooldown = 5
+        owner():soundPlay(toString(random(1000000)),10,"Building_Teleporter.Receive")
+    }
+    else {
+        hint("Cooldown for blink ends in " + toString(Cooldown),5)
+    }
+}
+
+if(Cooldown>0) {
+    Cooldown = Cooldown-Interval/1000
+}
+if(Cooldown2>0) {
+    Cooldown2 = Cooldown2-Interval/1000
+}
+if(Cooldown3>0) {
+    Cooldown3 = Cooldown3-Interval/1000
+}
+if(Cooldown4>0) {
+    Cooldown4 = Cooldown4-Interval/1000
+}
+if(Cooldown5>0) {
+    Cooldown5 = Cooldown5-Interval/1000
+}
+if(owner():keyPressed("n")) {
+    if(Cooldown2<=0) {
+        propDeleteAll()
+        propSpawn("models/Gibs/wood_gib01e.mdl",owner():aimPos(),1):soundPlay(toString(random(1000000)),10,Sounds[randint(10),string])
+        Cooldown2 = 2
+    }
+    else {
+        hint("Cooldown for diversion ends in " + toString(Cooldown2),5)
+    }
+}
+
+if(owner():keyPressed("x")) {
+    if(Cooldown3<=0) {
+        concmd("ent_create item_healthvial")
+        concmd("ent_create item_battery")
+        Cooldown3 = 10
+    }
+    else {
+        hint("Cooldown for regen ends in " + toString(Cooldown3),5)
+    } 
+}
+if(owner():keyPressed("e")) {
+    if(Cooldown4<=0) {
+        propSpawn("models/Gibs/wood_gib01e.mdl",owner():pos(),1):soundPlay(toString(random(1000000)),10,"Building_Teleporter.Send")
+        concmd("setpos " + toString(owner():pos():x()) + " " + toString(owner():pos():y()) + " " + toString(owner():pos():z()+500))
+        Cooldown4 = 5
+        owner():soundPlay(toString(random(1000000)),10,"Building_Teleporter.Receive")
+    }
+    else {
+        hint("Cooldown for warp ends in " + toString(Cooldown4),5)
+    }
+}
+
+if(owner():keyPressed("b")) {
+    Savepos = owner():pos()
+}
+
+if(owner():keyPressed("c")) {
+    if(Cooldown5<=0) {
+        propSpawn("models/Gibs/wood_gib01e.mdl",owner():pos(),1):soundPlay(toString(random(1000000)),10,"Building_Teleporter.Send")
+        concmd("setpos " + Savepos:x() + " " + Savepos:y() + " " + Savepos:z())
+        Cooldown5 = 5
+        owner():soundPlay(toString(random(1000000)),10,"Building_Teleporter.Receive")
+    }
+    else {
+        hint("Cooldown for teleport ends in " + toString(Cooldown5),5)
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,14 @@
+@name
+@inputs
+@outputs 
+@persist
+@trigger 
+
+interval(10)
+if(first()) {
+    runOnKeys(owner(), 1)
+}
+
+if(keyClkPressed(owner() == "e")) {
+    print("hi")
+}

@@ -1,0 +1,42 @@
+@name Homing things
+@inputs 
+@outputs 
+@persist Target:entity Me:entity Mul Mode Station:vector
+@trigger 
+
+interval(10)
+
+if(first()) {
+    runOnChat(1)
+    Me = entity():isWeldedTo()
+    Mul = 100
+    Mode = 0
+    Station = randvec(vec(15000,15000,15000),vec(-15000,-15000,-8000))
+}
+
+
+
+if(chatClk(owner())) {
+    if(owner():lastSaid():left(5) == "/targ") {
+        Target = findPlayerByName(owner():lastSaid():explode(" ")[2,string])
+        Mode = 1
+    }
+    if(owner():lastSaid():left(5) == "/home") {
+        Mode = 0
+    }
+}
+
+if(Mode) {
+    Me:applyForce((Target:pos()-Me:pos())*Mul)
+}
+else {
+    Me:applyForce((Station-Me:pos())*Mul)
+}
+
+
+
+
+
+
+
+

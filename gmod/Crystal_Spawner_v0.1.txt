@@ -1,0 +1,33 @@
+@name Crystal Spawner v0.1
+@inputs 
+@outputs 
+@persist SpawnLeft Working Prop:string Target:vector Props:array PropH:array
+@trigger 
+
+
+
+
+if(first()) {
+    SpawnLeft = 18                              #Anything over 18 can create bugs if used with console screens
+    SpawnTot = SpawnLeft                        #Total props spawned for reference later
+    Working = 1                                 #Check for props to spawn
+    Prop = "models/props_c17/FurnitureBathtub001a.mdl"                                   #Prop to spawn, string
+    Target = entity():pos()+vec(0,0,100)        #Temporary target. Will be made to support useful targets
+}
+
+
+if(Working) {
+    if(SpawnLeft>0) {
+        Props[SpawnTot-SpawnLeft,entity]=propSpawn(Prop,Target,ang(randvec(0,360)),1)       #Spawn a prop and add it to the "Props" array
+        SpawnLeft--
+        interval(250)
+        if(!SpawnLeft) {
+            for(I=1,Props:count()) {
+                PropH[I,number]=Prop[I,entity]:health()
+            }
+    }
+    else {
+        Working = 0
+        interval(1000)
+    }
+}

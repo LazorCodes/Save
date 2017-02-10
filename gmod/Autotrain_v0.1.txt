@@ -1,0 +1,78 @@
+@name Autotrain v0.3
+@inputs Stop1:vector Stop2:vector Stop3:vector Stop4:vector Start
+@outputs Sforward Sback Stopname:string
+@persist Buffer Stop StopTime TargetS Stopped Start Target Nr
+@trigger all
+
+
+
+if(first()) {
+    TargetS = 3000
+    Target = TargetS
+    Buffer = 20
+    StopTime = 2450
+    Stop = 1
+    Stopped = 0
+}
+
+interval(10)
+
+
+if(Stop == 1&entity():pos():distance(Stop1) < StopTime) {
+    Target = 0
+    Stopped = 1
+    Stop = 2
+    Stopname = "North"
+}
+if(Stop == 2&entity():pos():distance(Stop2) < StopTime) {
+    Target = 0
+    Stopped = 1
+    Stop = 3
+    Stopname = "East"
+}
+if(Stop == 3&entity():pos():distance(Stop3) < StopTime) {
+    Target = 0
+    Stopped = 1
+    Stop = 4
+    Stopname = "South"
+}
+if(Stop == 4&entity():pos():distance(Stop4) < StopTime) {
+    Target = 0
+    Stopped = 1
+    Stop = 1
+    Stopname "West"
+}
+
+
+
+
+if(Stopped == 1&Start) {
+    Target = TargetS
+    Stopped = 0
+    Nr = 0
+}
+
+
+
+
+Speed = entity():vel():length()
+
+if(Speed < 1&Speed > -1&Stopped == 1) {
+    Nr = 1
+}
+    
+
+if(Speed > Target - Buffer&Speed < Target + Buffer) {
+    Sforward = 0
+    Sback = 0
+}
+elseif(Speed < Target - Buffer) {
+    Sforward = 1
+    Sback = 0
+}
+elseif(Speed > Target + Buffer) {
+    if(Nr == 0) {
+        Sforward = 0
+        Sback = 1
+    }
+}

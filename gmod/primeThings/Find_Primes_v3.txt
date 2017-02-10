@@ -1,0 +1,51 @@
+@name Find Primes v3
+@inputs 
+@outputs 
+@persist Primes:gtable Number Divide MaxNumber Last Save:gtable
+@trigger 
+interval(10)
+if(first()) {
+    function addGt(Numberg:number) {
+        Primes[Primes:count()+1,number]=Numberg
+    }
+    Primes=gTable("Primes",1)
+    Save=gTable("Save",1)
+    Primes[1,number]=2
+    Primes[2,number]=3
+    Primes[3,number]=5
+    Primes[4,number]=7
+    Number = Save["n",number]+10
+    Save["n",number]=Save["n",number]+1
+    Primes:removeNumber(toString(Primes:count()))
+    Divide = 3
+    MaxNumber = Number/2
+    Last = toString(Number):right(1):toNumber()
+}
+
+for(I=1,940) {
+    if(Last==0|Last==2|Last==4|Last==5|Last==6|Last==8) {
+        Number=Number+10
+        MaxNumber = Number/2
+        Last = toString(Number):right(1):toNumber()
+    }
+    else {
+        if(Divide<MaxNumber) {
+            if(Number%Divide==0) {
+                Number=Number+10
+                Divide=3
+                MaxNumber = Number/2
+                Last = toString(Number):right(1):toNumber()
+            }
+            else {
+                Divide=Divide+2
+            }
+        }
+        else {
+            addGt(Number)
+            Divide=3
+            Number=Number+10
+            MaxNumber = Number/2
+            Last = toString(Number):right(1):toNumber()
+        }
+    }
+}

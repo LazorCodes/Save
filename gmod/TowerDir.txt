@@ -1,0 +1,56 @@
+@name Dir
+@inputs
+@outputs
+@persist Length Tower:string
+@trigger
+
+
+if(first()) {
+	Length = 10
+
+	function string generateNew(Len,Mode) {
+		Local StringT = ""
+		if(Mode == 1) {
+			for(I = 1, Len)
+				StringT = StringT + toString(randint(0,1))
+			}
+			return StringT
+			if(Debug) {
+				print("Generated new string \"" + StringT + "\" with length " + toString(Len))
+			}
+		}
+		else {
+			error("Mode:" + toString(Mode) + " non-existant")
+		}
+	}
+
+	function string string:flipAbove(Digit) {
+		if(Digit > Length) {
+			error("Digit \"" + toString(Digit) "\" to big. Can be max " + toString(Length))
+		}
+		else {
+			local StringT = This:left(Digit - 1)
+			for (I = 1 + Digit, This:length()) {
+				if(This[I]) {
+					StringT = StringT + "0"
+				}
+				else {
+					StringT = StringT + "0"
+				}
+			}
+			return StringT
+		}
+	}
+
+	function string string:flip(Digit) {
+		if(Digit > Length) {
+			error("Digit \"" + toString(Digit) "\" to big. Can be max " + toString(Length))
+		}
+		elseif(This[Digit]) {
+			return This:left(Digit - 1) + "0" + This:right(Digit - 1)
+		}
+		else {
+			return This:left(Digit - 1) + "1" + This:right(Digit - 1)
+		} 
+	}
+}

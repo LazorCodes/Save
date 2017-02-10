@@ -1,0 +1,93 @@
+return {
+	{
+		class = "background",
+		x = 0,
+		y = 0,
+		w = 2000,
+		h = 2000,
+		render = true,
+		phystype = "cross",
+		friction = 0,
+		jumpable = false,
+		color = { 255, 255, 255 },
+		texture = "brick2.jpg"
+	},
+	{
+		class = "platform",
+		x = 500,
+		y = 1200,
+		w = 1000,
+		h = 100,
+		render = true,
+		phystype = "slide",
+		friction = 3,
+		jumpable = true,
+		color = { 0 , 255, 0 },
+		texture = "tex.jpeg"
+	},
+	{
+		class = "platform",
+		x = 0,
+		y = 1150,
+		w = 1000,
+		h = 100,
+		render = true,
+		phystype = "slide",
+		friction = 3,
+		jumpable = true,
+		color = { 0 , 255, 0 },
+		texture = "brick4.png"
+	},
+	{
+		class = "border",
+		x = 0,
+		y = 0,
+		w = 2000,
+		h = 1,
+		render = false,
+		phystype = "slide",
+		friction = 3,
+		jumpable = false,
+		color = { 255, 255, 255 },
+		texture = nil
+	},
+	{
+		class = "border",
+		x = 0,
+		y = 2000,
+		w = 2000,
+		h = 2,
+		render = false,
+		phystype = "slide",
+		friction = 3,
+		jumpable = true,
+		color = { 255, 255, 255 },
+		texture = nil
+	},
+	{
+		class = "border",
+		x = 0,
+		y = 0,
+		w = 1,
+		h = 2000,
+		render = false,
+		phystype = "slide",
+		friction = 3,
+		jumpable = false,
+		color = { 255, 255, 255 },
+		texture = nil
+	},
+	{
+		class = "border",
+		x = 2000,
+		y = 0,
+		w = 1,
+		h = 2000,
+		render = false,
+		phystype = "slide",
+		friction = 3,
+		jumpable = false,
+		color = { 255, 255, 255 },
+		texture = nil
+	}
+}

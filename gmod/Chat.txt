@@ -1,0 +1,175 @@
+@name Chat
+@inputs
+@outputs
+@persist Chat:array Debug
+@trigger none
+
+runOnChat(1)
+
+if(first()) {
+    Debug = 1
+    if(concmd("echo test") != 1) {
+        error("No acsess to the console. set wire_expression2_concmd to 1 to fix this.")
+    }
+    #########################################################################
+    function kick(X1:string,X2:string) {
+        if(Chat:count() < 2) {
+            error("Too few args. /kick <name> [reason]")
+        }
+        if(findPlayerByName(X2):isPlayer() != 1) {
+            error("Couldn't find player by name: " + "\"" + X2 + "\"")
+        }
+        concmd("kickid " + findPlayerByName(X2):steamID() + " " + Chat:concat(" ",3))
+        if(Debug) {
+            print("Success, should have executed: " + "kickid " + findPlayerByName(X2):steamID() + " " + Chat:concat(" ",3))
+        }
+    }
+    #########################################################################
+    function ban(X1:string,X2:string,X3:string) {
+        if(Chat:count() < 3) {
+            error("Too few args. /ban <name> <length> [kick]")
+        }
+        if(findPlayerByName(X2):isPlayer() != 1) {
+            error("Couldn't find player by name: " + "\"" + X2 + "\"")
+        }
+        concmd("banid " + X3 + " " + findPlayerByName(X2):steamID() + " " + Chat[4,string])
+        if(Debug) {
+            print("Success, should have executed: " + "banid " + X3 + " " + findPlayerByName(X2):steamID() + " " + Chat[4,string])
+        }
+    }
+    #########################################################################
+    function kill(X1:string,X2:string) {
+        if(Chat:count() < 2) {
+    error("Too few args. /kill <name>")
+    } 
+        elseif(Chat:count() > 2) {
+            error("Too many args. /kill <name>")
+        }
+        if(findPlayerByName(X2):isPlayer() != 1) {
+            error("Couldn't find player by name: " + X2)
+        }
+        concmd("kill " + findPlayerByName(X2):name())
+        if(Debug) {
+            print("Success, should have executed: " + "kill " + findPlayerByName(X2):name())
+        }
+    }
+    #########################################################################
+    function goto(X1:string,X2:string) {
+        if(Chat:count() < 2) {
+            error("Too few args. /goto <name>")
+        } 
+        elseif(Chat:count() > 2) {
+            error("Too many args. /goto <name>")
+        }
+        if(findPlayerByName(X2):isPlayer() != 1) {
+            error("Couldn't find player by name: " + X2)
+        }
+        concmd("setpos " + toString(findPlayerByName(X2):pos():x()) + " " + toString(findPlayerByName(X2):pos():y()) + " " + toString(findPlayerByName(X2):pos():z() + 100))
+        if(Debug) {
+            print("Success, should have executed: " + "setpos " + toString(findPlayerByName(X2):pos():x()) + " " + toString(findPlayerByName(X2):pos():y()) + " " + toString(findPlayerByName(X2):pos():z() + 50))
+        }
+    }
+    #########################################################################
+    function cmd() {
+        if(Chat:count() < 2) {
+            error("Too few args. /cmd <args>")
+        }
+        if(concmd(Chat:concat(" ",2)) == 1) {
+            if(Debug) {
+                print("Success, should have executed: " + Chat:concat(" ",2) + ". That doesn't mean that it is a command though.")
+            }
+        }
+    }
+    #########################################################################
+    function impulse101() {
+        if(Chat:count() > 1) {
+            error("Too many args. /i101")
+        }
+        concmd("impulse 101")
+        print("Success, should have executed: impulse 101")
+    }
+    #########################################################################
+    function thirdperson() {
+        if(Chat:count() > 1) {
+            error("Too many args. /thirdperson OR /tp")
+        }
+        concmd("thirdperson")
+        print("Success, should have executed: thirdperson")
+    }
+    #########################################################################
+    function firstperson() {
+        if(Chat:count() > 1) {
+            error("Too many args. /firstperson OR /fp")
+        }
+        concmd("firstperson")
+        print("Success, should have executed: firstperson")
+    }
+    #########################################################################
+    function cleanup() {
+        if(Chat:count() > 1) {
+            error("Too many args. /cleanup")
+        }
+        concmd("gmod_cleanup")
+        print("Success, should have executed: gmod_cleanup")
+    }
+    #########################################################################
+    function cleanupall() {
+        if(Chat:count() > 1) {
+            error("Too many args. /cleanupall")
+        }
+        concmd("gmod_admin_cleanup")
+        print("Success, should have executed: gmod_admin_cleanup")
+    }
+    #########################################################################
+    function kickban(X1:string,X2:string,X3:string) {
+        if(Chat:count() < 4) {
+            error("Too few args. /kickban <name> <length> <reason>")
+        }
+        if(findPlayerByName(X2):isPlayer() != 1) {
+            error("Couldn't find player by name: " + "\"" + X2 + "\"")
+        }
+        concmd("banid " + X3 + " " + findPlayerByName(X2):steamID() + " " + "kick; kick " + findPlayerByName(X2):steamID() + " " + Chat:concat(" ",4))
+        if(Debug) {
+            print("Success, should have executed: " + "banid " + X3 + " " + findPlayerByName(X2):steamID() + "; kick " + findPlayerByName(X2):steamID() + " " + Chat:concat(" ",4))
+        }
+    }
+}
+
+if(chatClk(owner())) {
+    if(owner():lastSaid():index(1) == "/"){
+        Chat = owner():lastSaid():explode(" ")
+        if(Chat[1,string] == "/kick") {
+            kick(Chat[1,string],Chat[2,string])
+        }
+        if(Chat[1,string] == "/ban") {
+            ban(Chat[1,string],Chat[2,string],Chat[3,string])
+        }
+        elseif(Chat[1,string] == "/kill") {
+            kill(Chat[1,string],Chat[2,string])
+        }
+        elseif(Chat[1,string] == "/goto") {
+            goto(Chat[1,string],Chat[2,string])
+        }
+        elseif(Chat[1,string] == "/cmd") {
+            cmd()
+        }
+        elseif(Chat[1,string] == "/i101") {
+            impulse101()
+        }
+        elseif(Chat[1,string] == "/thirdperson" | Chat[1,string] == "/tp") {
+            thirdperson()
+        }
+        elseif(Chat[1,string] == "/firstperson" | Chat[1,string] == "/fp") {
+            firstperson()
+        }
+        elseif(Chat[1,string] == "/cleanup") {
+            cleanup()
+        }
+        elseif(Chat[1,string] == "/cleanupall") {
+            cleanupall()
+        }
+        elseif(Chat[1,string] == "/kickban") {
+            kickban(Chat[1,string],Chat[2,string],Chat[3,string])
+        }
+    }
+}
